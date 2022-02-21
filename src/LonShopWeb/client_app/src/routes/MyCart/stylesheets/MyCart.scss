@@ -1,0 +1,19 @@
+@import '../../../styles/variables.scss';
+
+.mycart-container {
+    background-color: $grey--zircon;
+
+    .cart-total {
+        padding: 10px 10px;
+
+        .pirce {
+            font-size: $font-size-xxxlarge;
+            font-weight: bold;
+        }
+
+        .checkout-btn {
+            font-size: $font-size-xxlarge;
+            font-weight: bold;
+        }
+    }
+}

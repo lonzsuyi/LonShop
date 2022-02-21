@@ -1,0 +1,12 @@
+@import '../../.././styles/variables.scss';
+
+.footer {
+    height: 50px;
+    line-height: 50px;
+    padding: 0;
+    
+    .footer-container {
+        justify-content: center;
+        background: $green--footer;
+    }
+}

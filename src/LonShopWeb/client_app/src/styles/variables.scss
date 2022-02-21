@@ -1,0 +1,73 @@
+// fonts
+$font-size-xsmall: 0.625rem; //10px
+$font-size-small: 0.6875rem; //11px
+$font-size-medium: 0.75rem; //12px 
+$font-size-xmedium: 0.8135rem; //13px
+$font-size-large: 0.875rem; //14px
+$font-size-xlarge: 0.9375rem; //15px
+$font-size-xxlarge: 1rem; //16px
+$font-size-xxxlarge: 1.125rem; //18px
+$font-size-xxxxlarge: 1.25rem; //20px
+$font-size-xxxxxlarge: 1.5rem; //24px
+$font-size-superlarge: 1.875rem; //30px
+$font-size-superxlarge: 2rem; //32px
+$font-size-superxxlarge: 2.25rem; //36px
+$font-size-superlargeplus: 3rem; //48px
+
+// colors
+$black: #000000;
+$black--opacity: rgba(0, 0, 0, 0.75);
+$bule--primary:#3A81D3;
+$bule--header:#2376D2;
+$blue--deep: #003087;
+$blue--alice-blue: #F5FAFE;
+$blue--casper: #B7BCBF;
+$blue--cobalt: #005EA6;
+$blue--denim: #0F6AAF;
+$blue--egyptian-blue: #1546A0;
+$blue--hawkes-blue: #CAD9EA;
+$blue--light-cyan: #CCFFE6;
+$blue--havelock-blue: #5884c1;
+$blue--maya-blue: #50C7F9;
+$blue--medium-aquamarine: #6DCE9E;
+$blue--navy-blue: #0070BA;
+$blue--pacific-blue: #009CDE;
+$blue--raven: #6C7379;
+$blue--solitude: #F5F7FA;
+$green--lime-green: #50DE50;
+$green--footer:#F0F2F5;
+$grey--cod-grey: #2C2E2F;
+$grey--Charcoal: #4A4A4A;
+$grey--ebony: #2D2E30;
+$grey--tuna: #484A4B;
+$grey--nobel: #999999;
+$grey--suva-grey: #898989;
+$grey--very-light-grey: #CCCCCC;
+$grey--white-linen: #EFE2DC;
+$grey--zircon: #EAECED;
+$grey--zumthor: #CBD2D6;
+$grey--collapse:#F8F8F8;
+$grey--tuna: #484A4B;
+$grey-body-backgorund:#CBD2D6;
+$grey--medium--light: #4E4E4E;
+$grey--shallow--light: #9A9A9A;
+$orange--light-coral: #F27F73;
+$orange--sunset-orange: #F75049;
+$orange--orange-peel: #FF9600;
+$red: #FF0000;
+$red--carnation-pink: #FFA5BA;
+$red--coral-red: #FF4242;
+$red--pink: #FFC0CB;
+$red--free-speech-red: #D20000;
+$violet--lavender: #E4F1FB;
+$white: #FFFFFF;
+$white--cosmic-latte: #EBFAF0;
+$white--white-smoke: #F5F5F5;
+$blue--solitude: #F5F7FA;
+$grey--zumthor: #CBD2D6;
+$green--jungle-green: #299976;
+
+$border: $grey--zumthor;
+$border-radius: 5px;
+$linear-background: linear-gradient(to right, $blue--navy-blue, $blue--egyptian-blue);
+$box-shadow: 0px 1px 5px 0px rgba(0, 0, 0, 0.1);

@@ -1,0 +1,235 @@
+@import '~antd/dist/antd.css';
+@import './fonts.scss';
+@import './variables.scss';
+
+html,
+body {
+    width: 100%;
+    height: 100%;
+    background-color: $white;
+    color: $grey--ebony;
+    line-height: normal;
+}
+
+a {
+    text-decoration: none;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea {
+    color: $grey--ebony;
+}
+
+body {
+    display: flex;
+    margin: 0;
+    padding: 0;
+    font-size: $font-size-medium;
+    font-family: 'PayPalSansBig-Light', 'Helvetica Neue', Arial, sans-serif;
+    overflow-x: hidden;
+}
+
+​​​​​​​h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: inherit;
+}
+
+#root {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: inherit;
+}
+
+.page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background-color: $grey--zumthor;
+    align-self: center;
+    width: 100%;
+}
+
+.content {
+    max-width: 1440px;
+    // margin: 10px 0;
+    // padding: 0 10px;
+    width: 100%;
+    align-self: center;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    position: relative;
+    flex-direction: column;
+    background-color: $grey--zumthor;
+}
+
+.content .content-container {
+    height: 100%;
+}
+
+// .content>div {
+//     height: 100%;
+//     border-radius: 5PX;
+//     background: $white;
+//     box-shadow: $box-shadow;
+// }
+
+.content .navigation-container {
+    width: 280px;
+    height: 100%;
+    padding: 10px;
+    background: $white;
+    box-shadow: $box-shadow;
+}
+
+.content .detail-container {
+    width: calc(100% - 280px);
+    height: 100%;
+}
+
+.content--unauthorized {
+    @extend .content;
+    border: 0 none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content__main {
+    height: 100%;
+}
+
+.hide {
+    display: none;
+}
+
+.icon--logo {
+    width: 25px;
+    height: 25px;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+.no-role {
+    width: 60%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+}
+
+label[class^="ppvx_checkbox__label___"] {
+    &:before {
+        font-size: $font-size-xxlarge;
+    }
+
+    &:after {
+        margin: 2px 0 0 2px !important;
+    }
+
+    &:before,
+    &:after {
+        width: 22px !important;
+        height: 22px !important;
+    }
+}
+
+.ppvx_col-md-3 {
+    @media (min-width: 47rem) {
+        -ms-flex: 0 0 25%;
+        flex: 0 0 25%;
+        max-width: 23.5%;
+    }
+}
+
+// layout
+.ant-layout {
+    background: none;
+}
+
+// btn
+.ant-btn-primary {
+    background: $bule--primary;
+    border-color: $bule--primary;
+}
+
+// radio
+.ant-radio-group-solid {
+    .ant-radio-button-wrapper:first-child {
+        border-top-left-radius: 5px;
+        border-bottom-left-radius: 5px;
+    }
+
+    .ant-radio-button-wrapper:last-child {
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+
+
+}
+
+.ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled) {
+    background: $bule--primary;
+    border-color: $bule--primary;
+}
+
+.ant-radio-button-wrapper-checked:not([class*=' ant-radio-button-wrapper-disabled']).ant-radio-button-wrapper:first-child {
+    border-right-color: $bule--primary
+}
+
+// menu
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: rgba($color: $bule--primary, $alpha: 0.3);
+    font-weight: bold;
+    color: $bule--primary;
+}
+
+// tooltip
+.ant-tooltip {
+    .ant-tooltip-inner {
+        color: $grey--cod-grey;
+        background-color: $blue--alice-blue;
+        border: 1px solid $blue--maya-blue;
+        border-radius: 5px;
+        padding: 5px 20px;
+    }
+
+    .ant-tooltip-arrow-content {
+        background-color: $blue--alice-blue;
+        border: 1px solid $blue--maya-blue;
+    }
+}
+
+.ant-tooltip .ant-tooltip-inner {
+    border: none;
+    font: $font-size-medium "PayPalSansBig-Light", sans-serif;
+    color: #FFFFFF;
+    background: $black--opacity;
+    border-radius: 6px;
+    line-height: 22px;
+}
+
+.ant-tooltip .ant-tooltip-arrow-content {
+    border: none;
+    background: $black--opacity;
+}
+
+.coming__soon {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}

@@ -1,0 +1,26 @@
+{
+    "code": 200,
+    "data": [
+        {
+            "code": "AUD",
+            "rate": 1,
+            "symbol": "$"
+        },
+        {
+            "code": "USD",
+            "rate": 0.72,
+            "symbol": "$"
+        },
+        {
+            "code": "NZD",
+            "rate": 1.07,
+            "symbol": "$"
+        },
+        {
+            "code": "CNY",
+            "rate": 4.54,
+            "symbol": "¥"
+        }
+    ],
+    "msg": ""
+}

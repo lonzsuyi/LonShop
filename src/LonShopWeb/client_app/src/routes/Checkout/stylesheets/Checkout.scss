@@ -1,0 +1,29 @@
+@import '../../../styles/variables.scss';
+
+.checkout-container {
+    background-color: $grey--zircon;
+
+    .total {
+        padding: 10px 10px;
+
+        .pirce-lable {
+            font-size: $font-size-xxxlarge;
+        }
+
+        .pirce {
+            margin-left: 5px;
+            font-size: $font-size-xxxlarge;
+            font-weight: bold;
+        }
+
+        .countiesrage-select {
+            width: 150px;
+            margin-right: 15px;
+        }
+
+        .checkout-btn {
+            font-size: $font-size-xxlarge;
+            font-weight: bold;
+        }
+    }
+}
