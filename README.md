@@ -1,5 +1,5 @@
 # LonShop (Continuous update)
-I will continue to update this project, if you have any questions, please tall me, I will do my best to complete it
+I will continue to update this project, if you have any questions, please tell me, I will do my best to complete it
 
 # Running the sample
 
