@@ -10,11 +10,17 @@ I will continue to update this project, if you have any questions, please tell m
 2. NodeJS (Version < 15.0.x )
 
 #### CLI :
-
-<pre>  
+<pre>
 $ cd LonShop/src/LonShopWeb
 $ dotnet run
 </pre>
+
+#### Front-end code in :
+<pre>
+$ cd LonShop/src/LonShopWeb/client_app
+$ npm run start
+</pre>
+
 
 
 # Current progress
