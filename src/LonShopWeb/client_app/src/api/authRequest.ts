@@ -10,5 +10,15 @@ export async function signIn(username: string, password: string) {
         return Promise.resolve(authData)
     }
 
-    const url = ``
+    const url = `${CONSTANTS.API.PREFIX}/auth/signin`
+    return httpRequest.post(url, {
+        userName: username,
+        password: password,
+        rememberMe: false
+    }).then((res: any) => {
+        localStorage.setItem('LonShopToken', res.data.result.token)
+        return res.data
+    }).catch(() => {
+        return []
+    })
 }

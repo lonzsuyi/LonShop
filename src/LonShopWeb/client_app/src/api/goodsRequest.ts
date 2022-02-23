@@ -10,5 +10,10 @@ export async function getGoods() {
         return Promise.resolve(goodsData)
     }
 
-    const url = ``
+    const url = `${CONSTANTS.API.PREFIX}/good/getGoods`
+    return httpRequest.get(url).then((res: any) => {
+        return res.data
+    }).catch(() => {
+        return []
+    })
 }

@@ -23,20 +23,20 @@ $ npm run start
 
 
 
-# Current progress
+# Current progress (Functionality delivered , UI Test processing)
 
 #### Front-end(React)
 
 1. Skeleton construction  (completed)
 2. Functionality and Interaction (completed)
-3. API binding (processing)
+3. API binding (completed)
 4. Unit Test (processing)
 
 #### Back-end(.Net)
 
 1. Skeleton construction  (completed)
-2. Functionality and Interaction (processing)
-3. API binding (processing)
+2. Functionality and Interaction (completed)
+3. API binding (completed)
 4. Unit Test (processing)
 
 ####  CD/CI

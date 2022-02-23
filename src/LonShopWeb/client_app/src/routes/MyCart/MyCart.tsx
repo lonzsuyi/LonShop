@@ -23,13 +23,24 @@ function MyCart(props: any) {
         authReducer: store.authReducer,
         cartReducer: store.cartReducer
     }))
-    const { cart } = cartReducer
+    const { id, cart, buyerId } = cartReducer
 
     // Handle method
     const delCartItem = async (params: CartItem) => {
-        const data: any = await cartRequest.delGood(params);
+        params.quantity = 0
+        const data: any = await cartRequest.updateCart({
+            id: id,
+            cart: cart.map((item: CartItem) => {
+                if (item.id === params.id) {
+                    return params
+                } else {
+                    return item
+                }
+            }),
+            buyerId: buyerId
+        })
         if (data.code === 200) {
-            dispatch(cartActions.delCart(params))
+            setCart(data)
         } else {
             message.error('Delete good in error, please retry')
         }
@@ -39,12 +50,43 @@ function MyCart(props: any) {
             return
         }
         params.quantity = quantity // Change quantity
-        const data: any = await cartRequest.updateGood(params);
+        const data: any = await cartRequest.updateCart({
+            id: id,
+            cart: cart.map((item: CartItem) => {
+                if (item.id === params.id) {
+                    return params
+                } else {
+                    return item
+                }
+            }),
+            buyerId: buyerId
+        })
         if (data.code === 200) {
-            dispatch(cartActions.udpateCart(params))
+            setCart(data)
         } else {
             message.error('Change good in error, please retry')
         }
+    }
+    const setCart = (data: any) => {
+        dispatch(cartActions.setCart({
+            id: data.result.id,
+            cart: data.result.items.map((item: CartItem) => {
+                return {
+                    id: item.id,
+                    good: {
+                        id: item.good.id,
+                        name: item.good.name,
+                        picUrl: item.good.picUrl,
+                        intro: item.good.intro,
+                        price: item.good.price,
+                        currency: item.good.currency
+                    },
+                    quantity: item.quantity,
+                    status: true
+                }
+            }),
+            buyerId: data.result.buyerId
+        }))
     }
     const toCheckout = () => {
         // Verify sign in and cart count

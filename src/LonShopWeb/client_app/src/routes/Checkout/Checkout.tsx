@@ -34,7 +34,7 @@ function Checkout(props: any) {
         authReducer: store.authReducer,
         cartReducer: store.cartReducer
     }))
-    const { cart } = cartReducer
+    const { id, cart, buyerId } = cartReducer
     const goodsTotal = cart.reduce((prev: any, curv: any) => {
         return multiply(plus(prev, multiply(curv.quantity, curv.good.price)), rateChoice)
     }, 0.0);
@@ -43,18 +43,17 @@ function Checkout(props: any) {
     const getCountiesRate = async () => {
         const data: any = await countiesRateRequest.getCountiesRate();
         if (data.code === 200) {
-            setCurrency(data.data[0].code)
-            setRateChoice(data.data[0].rate)
-            setCountiesRate(data.data)
+            setCurrency(data.result[0].id)
+            setRateChoice(data.result[0].rate)
+            setCountiesRate(data.result)
         } else {
             message.error('Get countires rate error, please retry')
         }
     }
-
     const getCost = async (goodsTotal: number) => {
         const data: any = await deliverRequest.getCost(goodsTotal);
         if (data.code === 200) {
-            setCost(multiply(data.data.cost, rateChoice));
+            setCost(multiply(data.result, rateChoice));
         } else {
             message.error('Cost calculate error, please retry')
         }
@@ -62,9 +61,20 @@ function Checkout(props: any) {
 
     // Handle method
     const delCartItem = async (params: CartItem) => {
-        const data: any = await cartRequest.delGood(params);
+        params.quantity = 0
+        const data: any = await cartRequest.updateCart({
+            id: id,
+            cart: cart.map((item: CartItem) => {
+                if (item.id === params.id) {
+                    return params
+                } else {
+                    return item
+                }
+            }),
+            buyerId: buyerId
+        })
         if (data.code === 200) {
-            dispatch(cartActions.delCart(params))
+            setCart(data)
         } else {
             message.error('Delete good in error, please retry')
         }
@@ -74,19 +84,50 @@ function Checkout(props: any) {
             return
         }
         params.quantity = quantity // Change quantity
-        const data: any = await cartRequest.updateGood(params);
+        const data: any = await cartRequest.updateCart({
+            id: id,
+            cart: cart.map((item: CartItem) => {
+                if (item.id === params.id) {
+                    return params
+                } else {
+                    return item
+                }
+            }),
+            buyerId: buyerId
+        })
         if (data.code === 200) {
-            dispatch(cartActions.udpateCart(params))
+            setCart(data)
         } else {
             message.error('Change good in error, please retry')
         }
     }
-    const currencyChange = (code: string) => {
+    const setCart = (data: any) => {
+        dispatch(cartActions.setCart({
+            id: data.result.id,
+            cart: data.result.items.map((item: CartItem) => {
+                return {
+                    id: item.id,
+                    good: {
+                        id: item.good.id,
+                        name: item.good.name,
+                        picUrl: item.good.picUrl,
+                        intro: item.good.intro,
+                        price: item.good.price,
+                        currency: item.good.currency
+                    },
+                    quantity: item.quantity,
+                    status: true
+                }
+            }),
+            buyerId: data.result.buyerId
+        }))
+    }
+    const currencyChange = (id: string) => {
         const choiseCurrent: any = countiesRate.find((item: CurrencyState) => {
-            return item.code === code;
+            return item.id === parseInt(id);
         })
         setRateChoice(choiseCurrent.rate)
-        setCurrency(choiseCurrent.code)
+        setCurrency(choiseCurrent.id)
     }
     const toCheckout = async () => {
         // Verify sign in and cart count
@@ -100,14 +141,14 @@ function Checkout(props: any) {
         }
 
         let params: OrderParamsState = {
-            cart: cart,
-            username: authReducer.username,
-            currency: currency
+            cartId: id,
+            currencyId: parseInt(currency)
         }
 
         const data: any = await checkoutRequest.checkout(params)
         if (data.code === 200) {
             // Success clean cart.
+            await cartRequest.delCart(id);
             await cartRequest.cleanGood();
             dispatch(cartActions.cleanCart())
             navigate(globalConstants.ROUTES.THANKPAGE)
@@ -151,7 +192,7 @@ function Checkout(props: any) {
                         {
                             countiesRate.map((item: any, index: number) => {
                                 return (
-                                    <Option key={index} value={item.code}>{`${item.code} : * ${item.rate}`}</Option>
+                                    <Option key={index} value={item.id}>{`${item.code} : * ${item.rate}`}</Option>
                                 )
                             })
                         }

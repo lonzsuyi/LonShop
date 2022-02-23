@@ -1,5 +1,12 @@
 import * as types from '../actions/constants/cart'
 
+export function setCart(params: types.CartState): types.CartActionTypes {
+    return {
+        type: types.SET_CART,
+        payload: params
+    }
+}
+
 export function addCart(params: types.CartItem): types.CartActionTypes {
     return {
         type: types.ADD_CART,

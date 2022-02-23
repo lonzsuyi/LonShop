@@ -5,7 +5,8 @@ const httpRequest = axios.create()
 
 // interceptors applies to every ajax call
 httpRequest.interceptors.request.use(
-    function (config) {
+    function (config: any) {
+        config.headers['Authorization'] = `Bearer ${localStorage.getItem('LonShopToken')}`
         return config
     },
     function (err) {

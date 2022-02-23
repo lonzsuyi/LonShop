@@ -1,16 +1,23 @@
 import { GoodState } from './good';
 
 export interface CartState {
+    id: string
     cart: Array<CartItem>
+    buyerId: string
 }
 
 export interface CartItem {
-    id: any,
+    id: string,
     good: GoodState,
     quantity: number,
     status: boolean
 }
 
+export const SET_CART = 'SET_CART'
+interface SetCartAction {
+    type: typeof SET_CART
+    payload: CartState
+}
 export const ADD_CART = 'ADD_CART'
 interface AddCartAction {
     type: typeof ADD_CART
@@ -31,4 +38,4 @@ interface CleanCartAction {
     type: typeof CLEAN_CART
 }
 
-export type CartActionTypes = AddCartAction | UpdateCartAction | DelCartAction | CleanCartAction
+export type CartActionTypes = SetCartAction | AddCartAction | UpdateCartAction | DelCartAction | CleanCartAction

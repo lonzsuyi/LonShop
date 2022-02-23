@@ -1,7 +1,5 @@
 {
     "code": 200,
-    "data": {
-        "cost": 20
-    },
+    "result": 20,
     "msg": ""
 }

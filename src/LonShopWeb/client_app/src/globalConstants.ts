@@ -1,7 +1,7 @@
 const CONSTANTS = {
     API: {
-        PREFIX: '/lonshop',
-        MOCK: true
+        PREFIX: 'https://localhost:5001/api',
+        MOCK: false
     },
     ROUTES: {
         HOME: '/',

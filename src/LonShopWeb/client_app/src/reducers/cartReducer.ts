@@ -1,11 +1,20 @@
 import * as types from '../actions/constants/cart'
 
 const initState: types.CartState = {
-    cart: []
+    id: '',
+    cart: [],
+    buyerId: ''
 }
 
 const cartReducer = (state = initState, action: types.CartActionTypes) => {
     switch (action.type) {
+        case types.SET_CART:
+            state = {
+                ...state,
+                id: action.payload.id,
+                cart: action.payload.cart
+            }
+            break;
         case types.ADD_CART:
             let addTmep;
             if (state.cart.findIndex((item) => item.good.id === action.payload.good.id) >= 0) {

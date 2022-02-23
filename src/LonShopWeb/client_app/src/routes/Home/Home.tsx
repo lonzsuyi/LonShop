@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import {  message } from 'antd'
+import { message } from 'antd'
 
 import Banner from '../../component/Banner/Banner'
 import GoodsWindows from '../../component/GoodsWindow/GoodsWindow'
@@ -27,7 +27,7 @@ function Home(props: any) {
     const getGoods = async () => {
         const data: any = await goodRequest.getGoods()
         if (data.code === 200) {
-            setGoods(data.data)
+            setGoods(data.result)
         } else {
             message.error('Get goods data error, please retry')
         }
@@ -61,7 +61,14 @@ function Home(props: any) {
         const addCartItem = async () => {
             const data: any = await cartRequest.addGood(cartParams);
             if (data.code === 200) {
-                dispatch(cartActions.addCart(cartParams))
+                dispatch(cartActions.setCart({
+                    id: data.result.id,
+                    buyerId: data.result.buyerId,
+                    cart: data.result.items.map((item: CartItem) => {
+                        return item
+                    })
+                }))
+                // dispatch(cartActions.addCart(cartParams))
             } else {
                 message.error('Add good in error, please retry')
             }
