@@ -37,7 +37,7 @@ $ npm run start
 1. Skeleton construction  (completed)
 2. Functionality and Interaction (completed)
 3. API binding (completed)
-4. Unit Test (processing)
+4. Unit Test (completed)
 
 ####  CD/CI
 
