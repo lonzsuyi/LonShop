@@ -3,7 +3,7 @@ import { Row, Col, InputNumber, Button, message } from 'antd'
 import { MinusOutlined } from '@ant-design/icons'
 
 import { multiply } from '../.././untils/calculate'
-import { CartItem } from '../.././actions/constants/cart'
+import { CartItem } from '../../constants/cart'
 
 import './stylesheets/GoodsList.scss'
 

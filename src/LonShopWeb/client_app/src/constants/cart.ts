@@ -1,8 +1,8 @@
 import { GoodState } from './good';
 
 export interface CartState {
-    id: string
-    cart: Array<CartItem>
+    id: number
+    cartItems: Array<CartItem>
     buyerId: string
 }
 

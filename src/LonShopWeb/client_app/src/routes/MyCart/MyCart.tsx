@@ -1,47 +1,44 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Button, message } from 'antd'
 
 import GoodsList from '../.././component/GoodsList/GoodsList'
 
-import globalConstants from '../.././globalConstants'
+import { useAppSelector, useAppDispatch } from '../.././redux/hooks';
+import { selectCart, updateCartASync } from '../../redux/cartSlice';
+import { selectAuth } from '../../redux/authSlice'
+import { CartItem } from '../../constants/cart'
 import { plus, multiply } from '../.././untils/calculate'
-import { CartItem } from '../.././actions/constants/cart'
-import * as cartActions from '../.././actions/cartActions'
-import * as cartRequest from '../../api/cartRequest'
+import globalConstants from '../../globalConfig'
 
 import './stylesheets/MyCart.scss'
 
 function MyCart(props: any) {
 
-    const dispatch = useDispatch()
-    const navigate = useNavigate();
-
     // Get redux data
-    const { authReducer, cartReducer } = useSelector((store: any) => ({
-        authReducer: store.authReducer,
-        cartReducer: store.cartReducer
-    }))
-    const { id, cart, buyerId } = cartReducer
+    const auth = useAppSelector(selectAuth)
+    const cart = useAppSelector(selectCart)
+
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     // Handle method
     const delCartItem = async (params: CartItem) => {
-        params.quantity = 0
-        const data: any = await cartRequest.updateCart({
-            id: id,
-            cart: cart.map((item: CartItem) => {
+        const data: any = await dispatch(updateCartASync({
+            id: cart.id,
+            cartItems: cart.cartItems.map((item: CartItem) => {
                 if (item.id === params.id) {
+                    let temp = params
+                    return { ...params, quantity: 0 }  // Clean quantity mean remove.
                     return params
                 } else {
                     return item
                 }
             }),
-            buyerId: buyerId
-        })
-        if (data.code === 200) {
-            setCart(data)
-        } else {
+            buyerId: cart.buyerId
+        })).unwrap()
+
+        if (data.code !== 200) {
             message.error('Delete good in error, please retry')
         }
     }
@@ -49,52 +46,30 @@ function MyCart(props: any) {
         if (quantity <= 0) {
             return
         }
-        params.quantity = quantity // Change quantity
-        const data: any = await cartRequest.updateCart({
-            id: id,
-            cart: cart.map((item: CartItem) => {
+
+        const data: any = await dispatch(updateCartASync({
+            id: cart.id,
+            cartItems: cart.cartItems.map((item: CartItem) => {
                 if (item.id === params.id) {
-                    return params
+                    return { ...params, quantity: quantity } // Change quantity
                 } else {
                     return item
                 }
             }),
-            buyerId: buyerId
-        })
-        if (data.code === 200) {
-            setCart(data)
-        } else {
+            buyerId: cart.buyerId
+        })).unwrap()
+
+        if (data.code !== 200) {
             message.error('Change good in error, please retry')
         }
     }
-    const setCart = (data: any) => {
-        dispatch(cartActions.setCart({
-            id: data.result.id,
-            cart: data.result.items.map((item: CartItem) => {
-                return {
-                    id: item.id,
-                    good: {
-                        id: item.good.id,
-                        name: item.good.name,
-                        picUrl: item.good.picUrl,
-                        intro: item.good.intro,
-                        price: item.good.price,
-                        currency: item.good.currency
-                    },
-                    quantity: item.quantity,
-                    status: true
-                }
-            }),
-            buyerId: data.result.buyerId
-        }))
-    }
     const toCheckout = () => {
         // Verify sign in and cart count
-        if (!authReducer.token) {
+        if (!auth.token) {
             navigate(globalConstants.ROUTES.SIGNIN)
             return
         }
-        if (cart <= 0) {
+        if (cart.cartItems.length <= 0) {
             message.info('The cart is nll, please add good and retry')
             return
         }
@@ -104,11 +79,11 @@ function MyCart(props: any) {
 
     return (
         <div className="mycart-container">
-            <GoodsList carts={cart} delCartItem={delCartItem} changeCartItem={changeCartItem} />
+            <GoodsList carts={cart.cartItems} delCartItem={delCartItem} changeCartItem={changeCartItem} />
             <Row className="cart-total" justify="space-between" align="middle">
                 <Col className="pirce">
                     <span>Total:</span>
-                    <span>{cart.reduce((prev: any, curv: any) => {
+                    <span>{cart.cartItems.reduce((prev: any, curv: any) => {
                         return plus(prev, multiply(curv.quantity, curv.good.price))
                     }, 0.0)} AUD</span>
                 </Col>

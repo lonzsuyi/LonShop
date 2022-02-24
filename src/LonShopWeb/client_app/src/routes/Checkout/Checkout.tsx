@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Select, Button, message } from 'antd'
 
 import GoodsList from '../.././component/GoodsList/GoodsList'
 
-import globalConstants from '../.././globalConstants'
-import { plus, multiply } from '../.././untils/calculate'
-import { CartItem } from '../.././actions/constants/cart'
-import { CurrencyState } from '../.././actions/constants/currency'
-import { OrderParamsState } from '../.././actions/constants/order'
-import * as cartActions from '../.././actions/cartActions'
-import * as cartRequest from '../.././api/cartRequest'
+import { useAppSelector, useAppDispatch } from '../.././redux/hooks';;
+import { selectAuth } from '../../redux/authSlice'
+import { selectCart, updateCartASync, delCartASync } from '../../redux/cartSlice'
 import * as deliverRequest from '../.././api/deliverRequest'
 import * as countiesRateRequest from '../.././api/countiesRateRequest'
 import * as checkoutRequest from '../.././api/checkoutRequest'
+import { CartItem } from '../../constants/cart'
+import { CurrencyState } from '../../constants/currency'
+import { OrderParamsState } from '../../constants/order'
+import globalConstants from '../../globalConfig'
+import { plus, multiply } from '../.././untils/calculate'
 
 import './stylesheets/Checkout.scss'
 
@@ -22,20 +22,21 @@ const { Option } = Select;
 
 function Checkout(props: any) {
 
-    const dispatch = useDispatch()
+    // Get redux data
+    const auth = useAppSelector(selectAuth)
+    const cart = useAppSelector(selectCart)
+
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [cost, setCost] = useState(0.00)
     const [rateChoice, setRateChoice] = useState(0.0)
     const [currency, setCurrency] = useState("")
+    const [currencyCode, setCurrencyCode] = useState("")
     const [countiesRate, setCountiesRate] = useState([])
 
-    // Get redux data
-    const { authReducer, cartReducer } = useSelector((store: any) => ({
-        authReducer: store.authReducer,
-        cartReducer: store.cartReducer
-    }))
-    const { id, cart, buyerId } = cartReducer
-    const goodsTotal = cart.reduce((prev: any, curv: any) => {
+
+
+    const goodsTotal = cart.cartItems.reduce((prev: any, curv: any) => {
         return multiply(plus(prev, multiply(curv.quantity, curv.good.price)), rateChoice)
     }, 0.0);
 
@@ -44,6 +45,7 @@ function Checkout(props: any) {
         const data: any = await countiesRateRequest.getCountiesRate();
         if (data.code === 200) {
             setCurrency(data.result[0].id)
+            setCurrencyCode(data.result[0].code)
             setRateChoice(data.result[0].rate)
             setCountiesRate(data.result)
         } else {
@@ -61,21 +63,22 @@ function Checkout(props: any) {
 
     // Handle method
     const delCartItem = async (params: CartItem) => {
-        params.quantity = 0
-        const data: any = await cartRequest.updateCart({
-            id: id,
-            cart: cart.map((item: CartItem) => {
+        params.quantity = 0 // Clean quantity mean remove.
+        const data: any = await dispatch(updateCartASync({
+            id: cart.id,
+            cartItems: cart.cartItems.map((item: CartItem) => {
                 if (item.id === params.id) {
+                    let temp = params
+                    temp.quantity = 0  // Clean quantity mean remove.
                     return params
                 } else {
                     return item
                 }
             }),
-            buyerId: buyerId
-        })
-        if (data.code === 200) {
-            setCart(data)
-        } else {
+            buyerId: cart.buyerId
+        })).unwrap()
+
+        if (data.code !== 200) {
             message.error('Delete good in error, please retry')
         }
     }
@@ -83,74 +86,52 @@ function Checkout(props: any) {
         if (quantity <= 0) {
             return
         }
-        params.quantity = quantity // Change quantity
-        const data: any = await cartRequest.updateCart({
-            id: id,
-            cart: cart.map((item: CartItem) => {
+
+        const data: any = await dispatch(updateCartASync({
+            id: cart.id,
+            cartItems: cart.cartItems.map((item: CartItem) => {
                 if (item.id === params.id) {
-                    return params
+                    return { ...params, quantity: 0 }  // Change quantity
                 } else {
                     return item
                 }
             }),
-            buyerId: buyerId
-        })
-        if (data.code === 200) {
-            setCart(data)
-        } else {
+            buyerId: cart.buyerId
+        })).unwrap()
+
+        if (data.code !== 200) {
             message.error('Change good in error, please retry')
         }
-    }
-    const setCart = (data: any) => {
-        dispatch(cartActions.setCart({
-            id: data.result.id,
-            cart: data.result.items.map((item: CartItem) => {
-                return {
-                    id: item.id,
-                    good: {
-                        id: item.good.id,
-                        name: item.good.name,
-                        picUrl: item.good.picUrl,
-                        intro: item.good.intro,
-                        price: item.good.price,
-                        currency: item.good.currency
-                    },
-                    quantity: item.quantity,
-                    status: true
-                }
-            }),
-            buyerId: data.result.buyerId
-        }))
     }
     const currencyChange = (id: string) => {
         const choiseCurrent: any = countiesRate.find((item: CurrencyState) => {
             return item.id === parseInt(id);
         })
+        setCurrencyCode(choiseCurrent.code)
         setRateChoice(choiseCurrent.rate)
         setCurrency(choiseCurrent.id)
     }
     const toCheckout = async () => {
         // Verify sign in and cart count
-        if (!authReducer.token) {
+        if (!auth.token) {
             navigate(globalConstants.ROUTES.SIGNIN)
             return
         }
-        if (cart <= 0) {
+        if (cart.cartItems.length <= 0) {
             message.info('The cart is nll, please add good and retry')
             return
         }
 
         let params: OrderParamsState = {
-            cartId: id,
+            cartId: cart.id,
             currencyId: parseInt(currency)
         }
 
         const data: any = await checkoutRequest.checkout(params)
         if (data.code === 200) {
             // Success clean cart.
-            await cartRequest.delCart(id);
-            await cartRequest.cleanGood();
-            dispatch(cartActions.cleanCart())
+            await dispatch(delCartASync(cart.id));
+            // dispatch(cartActions.cleanCart())
             navigate(globalConstants.ROUTES.THANKPAGE)
         } else {
             message.error('Checkout error,please retry')
@@ -164,27 +145,27 @@ function Checkout(props: any) {
         getCountiesRate()
     }, [])
     useEffect(() => {
-        if (cart.length > 0) {
+        if (cart.cartItems.length > 0) {
             getCost(goodsTotal)
         }
     }, [goodsTotal])
 
     return (
         <div className="checkout-container">
-            <GoodsList carts={cart} delCartItem={delCartItem} changeCartItem={changeCartItem} />
+            <GoodsList carts={cart.cartItems} delCartItem={delCartItem} changeCartItem={changeCartItem} />
             <Row className="total" justify="space-between" align="middle">
                 <Col>
                     <Row>
                         <span className="pirce-lable">Goods Total :</span>
-                        <span className="pirce">{`${goodsTotal.toFixed(2)} ${currency}`}</span>
+                        <span className="pirce">{`${goodsTotal.toFixed(2)} ${currencyCode}`}</span>
                     </Row>
                     <Row>
                         <span className="pirce-lable">Cost :</span>
-                        <span className="pirce">{`${cost.toFixed(2)} ${currency}`}</span>
+                        <span className="pirce">{`${cost.toFixed(2)} ${currencyCode}`}</span>
                     </Row>
                     <Row>
                         <span className="pirce-lable">Total Amount Payable :</span>
-                        <span className="pirce">{`${plus(goodsTotal, cost)?.toFixed(2)} ${currency}`}</span>
+                        <span className="pirce">{`${plus(goodsTotal, cost)?.toFixed(2)} ${currencyCode}`}</span>
                     </Row>
                 </Col>
                 <Col>

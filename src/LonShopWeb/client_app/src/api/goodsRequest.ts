@@ -1,6 +1,6 @@
 import { stringify } from 'qs'
 import httpRequest from '../untils/httpRequest'
-import CONSTANTS from '../globalConstants'
+import CONSTANTS from '../globalConfig'
 
 import goodsData from '../mock/goods.json'
 

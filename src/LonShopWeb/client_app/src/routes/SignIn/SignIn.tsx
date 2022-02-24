@@ -1,27 +1,21 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { Row, Col, Input, Button, message } from 'antd'
 
-import * as authAction from '../../actions/authActions'
-import * as authRequest from '../.././api/authRequest'
-import * as cartAction from '../.././actions/cartActions'
-import * as cartRequest from '../.././api/cartRequest'
-import { CartItem } from '../.././actions/constants/cart';
-import { GoodState } from '../../actions/constants/good';
+import { useAppDispatch } from '../../redux/hooks';
+import { signInASync } from '../../redux/authSlice'
+import { getandCreateCartItemASync } from '../../redux/cartSlice'
 
 import './stylesheets/SignIn.scss'
 
-
-
 function SignIn(props: any) {
 
-    const dispatch = useDispatch()
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
 
-    const SignIn = () => {
+    const SignIn = async () => {
 
         // Verify field
         if (!username) {
@@ -34,49 +28,11 @@ function SignIn(props: any) {
         }
 
         // Http request
-        const signIn = async () => {
-            const data: any = await authRequest.signIn(username, password)
-            if (data.code === 200) {
-                dispatch(authAction.setAuth({
-                    token: data.result.token,
-                    username: data.result.username,
-                    email: data.result.email,
-                    expired: data.result.expired
-                }))
-
-                console.log('success')
-
-                // Init Cart
-                const cartData: any = await cartRequest.getOrCreateCart()
-                if (cartData.code == 200) {
-                    dispatch(cartAction.setCart({
-                        id: cartData.result.id,
-                        cart: cartData.result.items.map((item: CartItem) => {
-                            return {
-                                id: item.id,
-                                good: {
-                                    id: item.good.id,
-                                    name: item.good.name,
-                                    picUrl: item.good.picUrl,
-                                    intro: item.good.intro,
-                                    price: item.good.price,
-                                    currency: item.good.currency
-                                },
-                                quantity: item.quantity,
-                                status: true
-                            }
-                        }),
-                        buyerId: cartData.result.buyerId
-                    }))
-                }
-
-                navigate(-1)
-            } else {
-                message.error('Sign in error, please retry')
-            }
+        const data: any = await dispatch(signInASync({ username: username, password: password })).unwrap();
+        if (data.code === 200) {
+            await dispatch(getandCreateCartItemASync()).unwrap();
+            navigate(-1)
         }
-
-        signIn()
     }
 
     return (

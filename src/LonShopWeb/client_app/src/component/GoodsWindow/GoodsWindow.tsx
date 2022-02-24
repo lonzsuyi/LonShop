@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Row, Col, Button } from 'antd'
 
-import { GoodState } from '../.././actions/constants/good'
+import { GoodState } from '../../constants/good'
 
 import './stylesheets/GoodsWindow.scss'
 

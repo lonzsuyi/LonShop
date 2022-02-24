@@ -1,8 +1,8 @@
 import { stringify } from 'qs'
 import httpRequest from '../untils/httpRequest'
-import CONSTANTS from '../globalConstants'
+import CONSTANTS from '../globalConfig'
 
-import { CartState, CartItem } from '.././actions/constants/cart'
+import { CartState, CartItem } from '../constants/cart'
 
 export async function getOrCreateCart() {
     if (CONSTANTS.API.MOCK) {
@@ -11,7 +11,7 @@ export async function getOrCreateCart() {
 
     const url = `${CONSTANTS.API.PREFIX}/basket/getorcreatebasket`
     return httpRequest.get(url).then((res: any) => {
-        return res.data
+        return res
     }).catch(() => {
         return {}
     })
@@ -28,7 +28,7 @@ export async function addGood(params: CartItem) {
         price: params.good.price,
         quantity: params.quantity
     }).then((res: any) => {
-        return res.data
+        return res
     }).catch(() => {
         return {}
     })
@@ -47,8 +47,7 @@ export async function updateCart(params: CartState) {
 
     const url = `${CONSTANTS.API.PREFIX}/basket/updatebasket`
     let temp: any = {};
-    params.cart.forEach((item: CartItem) => {
-        console.log(item)
+    params.cartItems.forEach((item: CartItem) => {
         temp[item.id] = item.quantity
     })
 
@@ -56,7 +55,7 @@ export async function updateCart(params: CartState) {
         id: params.id,
         quantities: temp
     }).then((res: any) => {
-        return res.data
+        return res
     }).catch(() => {
         return {}
     })

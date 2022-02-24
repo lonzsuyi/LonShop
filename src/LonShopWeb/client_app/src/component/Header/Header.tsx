@@ -1,10 +1,13 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
-
 import { Layout, Row, Col, Badge } from 'antd'
 import { ShoppingCartOutlined } from '@ant-design/icons'
-import globalConstants from '../.././globalConstants'
+
+import { useAppSelector } from '../../redux/hooks'
+import { selectAuth } from '../../redux/authSlice'
+import { selectCart } from '../../redux/cartSlice'
+
+import globalConstants from '../../globalConfig'
 
 import './stylesheets/Header.scss'
 
@@ -13,10 +16,9 @@ const { Header } = Layout
 function HeaderContainer() {
 
     // Get redux data
-    const { authReducer, cartReducer } = useSelector((store: any) => ({
-        authReducer: store.authReducer,
-        cartReducer: store.cartReducer
-    }))
+    const auth = useAppSelector(selectAuth)
+    const cart = useAppSelector(selectCart)
+
 
     return (
         <Header className="header">
@@ -29,11 +31,11 @@ function HeaderContainer() {
                 <Col className="header-right">
                     <Row justify="center" align="middle">
                         {
-                            authReducer.token ? [
-                                <Col key={0} className='user-info'>{authReducer.username}</Col>,
+                            auth.token ? [
+                                <Col key={0} className='user-info'>{auth.username}</Col>,
                                 <Col key={1} className='cart'>
                                     <Link to={globalConstants.ROUTES.MYCART}>
-                                        <Badge count={cartReducer.cart.reduce((prev: any, curv: any) => prev + curv.quantity, 0)}>
+                                        <Badge count={cart.cartItems.reduce((prev: any, curv: any) => prev + curv.quantity, 0)}>
                                             <ShoppingCartOutlined className="cart-icon" />
                                         </Badge>
                                     </Link>

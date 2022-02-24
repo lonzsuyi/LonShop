@@ -1,8 +1,8 @@
 import { stringify } from 'qs'
 import httpRequest from '../untils/httpRequest'
-import CONSTANTS from '../globalConstants'
+import CONSTANTS from '../globalConfig'
 
-import { OrderParamsState } from '../actions/constants/order'
+import { OrderParamsState } from '../constants/order'
 
 export async function checkout(params: OrderParamsState) {
     if (CONSTANTS.API.MOCK) {

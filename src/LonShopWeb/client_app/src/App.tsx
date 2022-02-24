@@ -1,8 +1,8 @@
-import React from 'react'
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout, Row, Col } from 'antd'
+import { Layout } from 'antd'
 
-import globalConstants from './globalConstants'
+import globalConstants from './globalConfig'
 
 import HeaderContainer from './component/Header/Header'
 import FooterContainer from './component/Footer/Footer'
@@ -19,30 +19,31 @@ const ThankPage = React.lazy(() => import('./routes/ThankPage/ThankPage'))
 
 const { Content } = Layout
 
-function App(props: any) {
-    return (
-        <React.Fragment>
-            <Layout>
-                <Content className="content">
-                    <Router>
-                        <HeaderContainer />
-                        <React.Suspense fallback={< LazyLoading />}>
-                            <Routes>
-                                <Route path={globalConstants.ROUTES.HOME} element={<Home />} />
-                                <Route path={globalConstants.ROUTES.SIGNIN} element={<SignIn />} />
-                                <Route path={globalConstants.ROUTES.MYCART} element={<MyCart />} />
-                                <Route path={globalConstants.ROUTES.MYORDER} element={<MyOrder />} />
-                                <Route path={globalConstants.ROUTES.CHECKOUT} element={<Checkout />} />
-                                <Route path={globalConstants.ROUTES.PAYSTATUS} element={<PayStatus />} />
-                                <Route path={globalConstants.ROUTES.THANKPAGE} element={<ThankPage />} />
-                            </Routes>
-                        </React.Suspense>
-                        <FooterContainer />
-                    </Router>
-                </Content>
-            </Layout>
-        </React.Fragment>
-    )
+function App() {
+  return (
+    <React.Fragment>
+      <Layout>
+        <Content className="content">
+          <div>Test</div>
+          <Router>
+            <HeaderContainer />
+            <React.Suspense fallback={< LazyLoading />}>
+              <Routes>
+                <Route path={globalConstants.ROUTES.HOME} element={<Home />} />
+                <Route path={globalConstants.ROUTES.SIGNIN} element={<SignIn />} />
+                <Route path={globalConstants.ROUTES.MYCART} element={<MyCart />} />
+                <Route path={globalConstants.ROUTES.MYORDER} element={<MyOrder />} />
+                <Route path={globalConstants.ROUTES.CHECKOUT} element={<Checkout />} />
+                <Route path={globalConstants.ROUTES.PAYSTATUS} element={<PayStatus />} />
+                <Route path={globalConstants.ROUTES.THANKPAGE} element={<ThankPage />} />
+              </Routes>
+            </React.Suspense>
+            <FooterContainer />
+          </Router>
+        </Content>
+      </Layout>
+    </React.Fragment>
+  );
 }
 
 export default App;

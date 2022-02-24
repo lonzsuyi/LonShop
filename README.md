@@ -1,5 +1,13 @@
 # LonShop (Continuous update)
-I will continue to update this project, if you have any questions, please tell me, I will do my best to complete it
+
+### Mainly used technology and design ideas
+
+1. Typescript; React(17+ hook)/React-router; Redux(redux toolkit); Jest; SCSS; [MVVM design patterns)]
+2. .Net Core/EF Core(6.0) [DDD pattern, Microservices, Restful]
+3.  Docker,CD/CI -- to be realized --
+
+# Memo 
+Please let me know if you have any questions or ideas
 
 # Running the sample
 
@@ -21,16 +29,14 @@ $ cd LonShop/src/LonShopWeb/client_app
 $ npm run start
 </pre>
 
-
-
-# Current progress (Functionality delivered , UI Test processing)
+# Current progress 
 
 #### Front-end(React)
 
 1. Skeleton construction  (completed)
 2. Functionality and Interaction (completed)
 3. API binding (completed)
-4. Unit Test (processing)
+4. Unit Test (completed)
 
 #### Back-end(.Net)
 
@@ -38,12 +44,24 @@ $ npm run start
 2. Functionality and Interaction (completed)
 3. API binding (completed)
 4. Unit Test (completed)
+5. Swagger (processing)
 
 ####  CD/CI
 
 1. Dockerfile (completed)
-2. Cloud server deployment(processing)
+2. Auto pull request deploy (processing)
+3. Cloud server deployment(processing)
 
 # Future
-1. Extend functionality and microservices (Service Governance, MQ etc.)
-2. Add Streaming
+1. Expand demand
+2. Extend functionality and microservices (Service Governance, MQ etc.)
+3. Improve UI and interaction details
+4. Add Streaming
+
+# Log
+
+1. [2022/02/17] - Get technical test questions   
+2. [2022/02/18 - 2022/02/20] - Build skeleton constructio   
+3. [2022/02/21] - front-end functionality and interaction  
+4. [2022/02/22] - Bask-end functionality and interaction    
+5. [2022/02/23 - 2022/02/24] API binding,rebulid redux to redux tookit architecture and coding unit test 

@@ -1,28 +1,26 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector, useDispatch } from 'react-redux'
 import { message } from 'antd'
 
 import Banner from '../../component/Banner/Banner'
 import GoodsWindows from '../../component/GoodsWindow/GoodsWindow'
 
-import globalConstants from '../.././globalConstants'
-import { GoodState } from '../.././actions/constants/good'
-import { CartItem } from '../.././actions/constants/cart'
-import * as cartActions from '../.././actions/cartActions'
-import * as cartRequest from '../../api/cartRequest'
+import { useAppSelector, useAppDispatch } from '../.././redux/hooks';
+import { addCartItemASync } from '../../redux/cartSlice';
+import { GoodState } from '../../constants/good'
+import { selectAuth } from '../../redux/authSlice'
+import { CartItem } from '../../constants/cart'
 import * as goodRequest from '../.././api/goodsRequest'
+import globalConstants from '../../globalConfig'
 
-function Home(props: any) {
-
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const [goods, setGoods] = useState([]);
+function Home() {
 
     // Get redux data
-    const { authReducer } = useSelector((store: any) => ({
-        authReducer: store.authReducer
-    }))
+    const auth = useAppSelector(selectAuth)
+
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate()
+    const [goods, setGoods] = useState([]);
 
     const getGoods = async () => {
         const data: any = await goodRequest.getGoods()
@@ -35,7 +33,7 @@ function Home(props: any) {
 
     // Button method
     const addCart = (params: GoodState) => {
-        if (!authReducer.token) {
+        if (!auth.token) {
             navigate(globalConstants.ROUTES.SIGNIN)
             return
         }
@@ -43,7 +41,7 @@ function Home(props: any) {
         addCartItem(params)
     }
     const buyNow = (params: GoodState) => {
-        if (!authReducer.token) {
+        if (!auth.token) {
             navigate(globalConstants.ROUTES.SIGNIN)
             return
         }
@@ -51,30 +49,32 @@ function Home(props: any) {
         addCartItem(params)
         navigate(globalConstants.ROUTES.MYCART)
     }
-    const addCartItem = (params: GoodState) => {
+    const addCartItem = async (params: GoodState) => {
         let cartParams: CartItem = {
             id: params.id,
             good: params,
             quantity: 1,
             status: true
         };
-        const addCartItem = async () => {
-            const data: any = await cartRequest.addGood(cartParams);
-            if (data.code === 200) {
-                dispatch(cartActions.setCart({
-                    id: data.result.id,
-                    buyerId: data.result.buyerId,
-                    cart: data.result.items.map((item: CartItem) => {
-                        return item
-                    })
-                }))
-                // dispatch(cartActions.addCart(cartParams))
-            } else {
-                message.error('Add good in error, please retry')
-            }
-        }
+        await dispatch(addCartItemASync(cartParams))
 
-        addCartItem()
+        // const addCartItem = async () => {
+        //     const data: any = await cartRequest.addGood(cartParams);
+        //     if (data.code === 200) {
+        //         // dispatch(cartActions.setCart({
+        //         //     id: data.result.id,
+        //         //     buyerId: data.result.buyerId,
+        //         //     cart: data.result.items.map((item: CartItem) => {
+        //         //         return item
+        //         //     })
+        //         // }))
+        //         // dispatch(cartActions.addCart(cartParams))
+        //     } else {
+        //         message.error('Add good in error, please retry')
+        //     }
+        // }
+
+        // addCartItem()
     }
 
     /**
