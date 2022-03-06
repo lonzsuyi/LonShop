@@ -29,6 +29,22 @@ $ cd LonShop/src/LonShopWeb/client_app
 $ npm run start
 </pre>
 
+# Design ideas Chart
+
+## front-end Design (MVVM)
+
+![avatar](https://github.com/lonzsuyi/LonShop/blob/main/doc/React%2BRedux%2BMVVM.png)
+
+## back-end Desgin
+
+### Domain Driven Design (DDD)
+
+![avatar](https://github.com/lonzsuyi/LonShop/blob/main/doc/DDD.png)
+
+### Command Query Responsibility Segregation (CQRS)
+
+![avatar](https://github.com/lonzsuyi/LonShop/blob/main/doc/CQRS.png)
+
 # Current progress 
 
 #### Front-end(React)
