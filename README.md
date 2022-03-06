@@ -45,6 +45,10 @@ $ npm run start
 
 ![avatar](https://github.com/lonzsuyi/LonShop/blob/main/doc/CQRS.png)
 
+### Microservice Boundaries and Sovereign Perspectives
+
+![avatar](https://github.com/lonzsuyi/LonShop/blob/main/doc/microsevices.png)
+
 # Current progress 
 
 #### Front-end(React)
